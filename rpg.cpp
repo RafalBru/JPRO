@@ -46,7 +46,6 @@ struct bohater
     char punkt;
     int doswiadczenie;
     ekwipunek* eq[10][30];
-    void (*move)(bohater*, bohater*);
 };
 bohater* Wojownik(struct bohater& wojownik)
 {
@@ -81,7 +80,7 @@ bohater* PrzeciwnikGoblin(struct bohater& goblin)
     goblin.obrazenia = 10;
     goblin.zdrowie = 70;
     goblin.punkt = '*';
-    strcpy_s(goblin.nazwa, "Goblib");
+    strcpy_s(goblin.nazwa, "Goblin");
     return &goblin;
 }
 bohater* PrzeciwnikRycerz(struct bohater& rycerz)
@@ -90,98 +89,9 @@ bohater* PrzeciwnikRycerz(struct bohater& rycerz)
     rycerz.obrazenia = 25;
     rycerz.zdrowie = 100;
     rycerz.punkt = '*';
-    strcpy_s(rycerz.nazwa, "Goblin");
+    strcpy_s(rycerz.nazwa, "Rycerz");
     return &rycerz;
 }
-/*
-void ruch_pasywny(bohater* Hero, bohater* Enemy)
-{
-    int obszar = 1;
-    for (int x = Enemy->pozycjaX - obszar; x < Enemy->pozycjaX + obszar; x++)
-    {
-        for (int y = Enemy->pozycjaY - obszar; y < Enemy->pozycjaY + obszar; y++)
-        {
-            if (Hero->pozycjaX == x && Hero->pozycjaY == y)
-            {
-                if (x < Enemy->pozycjaX)
-                {
-                    Enemy->pozycjaX--;
-                }
-                else
-                {
-                    Enemy->pozycjaX++;
-                }
-                if (y < Enemy->pozycjaX)
-                {
-                    Enemy->pozycjaX--;
-                }
-                else
-                {
-                    Enemy->pozycjaX++;
-                }
-            }
-        }
-    }
-}
-void ruch_atak(bohater* Hero, bohater* Enemy)
-{
-    int obszar = 5;
-    for (int x = Enemy->pozycjaX - obszar; x < Enemy->pozycjaX + obszar; x++)
-    {
-        for (int y = Enemy->pozycjaY - obszar; y < Enemy->pozycjaY + obszar; y++)
-        {
-            if (Hero->pozycjaX == x && Hero->pozycjaY == y)
-            {
-                if (x < Enemy->pozycjaX)
-                {
-                    Enemy->pozycjaX = Enemy->pozycjaX + 3;
-                }
-                else
-                {
-                    Enemy->pozycjaX = Enemy->pozycjaX - 2;
-                }
-                if (y < Enemy->pozycjaX)
-                {
-                    Enemy->pozycjaY = Enemy->pozycjaX + 3;
-                }
-                else
-                {
-                    Enemy->pozycjaY = Enemy->pozycjaY - 2;
-                }
-            }
-        }
-    }
-}
-void ruch_defensywny(bohater* Hero, bohater* Enemy)
-{
-    int obszar = 3;
-    for (int x = Enemy->pozycjaX - obszar; x < Enemy->pozycjaX + obszar; x++)
-    {
-        for (int y = Enemy->pozycjaY - obszar; y < Enemy->pozycjaY + obszar; y++)
-        {
-            if (Hero->pozycjaX == x && Hero->pozycjaY == y)
-            {
-                if (x < Enemy->pozycjaX)
-                {
-                    Enemy->pozycjaX++;
-                }
-                else
-                {
-                    Enemy->pozycjaX--;
-                }
-                if (y < Enemy->pozycjaY)
-                {
-                    Enemy->pozycjaY++;
-                }
-                else
-                {
-                    Enemy->pozycjaY--;
-                }
-            }
-        }
-    }
-}
-*/
 void licznik()
 {
     int czas = 0;
@@ -228,13 +138,13 @@ void MapGeneration()
 task* Misja1(struct task& Misja1)
 {
     Misja1.numer_misji = 1;
-    strcpy_s(Misja1.opis, "Zabij 20 przeciwników");
+    strcpy_s(Misja1.opis, "Zabij 10 przeciwników");
     return &Misja1;
 }
 task* Misja2(struct task& Misja2)
 {
     Misja2.numer_misji = 2;
-    strcpy_s(Misja2.opis, "Zabij 50 przeciwników");
+    strcpy_s(Misja2.opis, "Zabij 20 przeciwników");
     return &Misja2;
 }
 void WybierzKlase()
@@ -352,6 +262,7 @@ void MovingSystem()
                     {
                     case ' ':
                         mapa[i][j] = ' ';
+                        i = i - 1;
                         mapa[i1][j] = '@';
                         system("cls");
                         RefreshMap();
@@ -365,6 +276,7 @@ void MovingSystem()
                     {
                     case ' ':
                         mapa[i][j] = ' ';
+                        i = i + 1;
                         mapa[i2][j] = '@';
                         system("cls");
                         RefreshMap();
@@ -450,20 +362,6 @@ void zapis()
         }
     }
     fclose(plik);
-    /*
-    for (int i = 0; i < wiersze; i++)
-    {
-        for (int j = 0; j < kolumny; j++)
-        {
-            fprintf(plik, "%c", mapa[i][j]);
-        }
-    }
-    if (plik2 == NULL)
-    {
-        printf("Problem z zapisem postepu");
-    }
-    */
-
 }
 /////////////////////////////////////////////////////////////
 void walka(bohater* Hero, bohater* Enemy)
@@ -551,12 +449,13 @@ void opcje()
     case 'p':
         zapis();
         break;
-    }
+    case 'q':
+        break;
+    }    
 }
+void (*zapisDoPliku)() = &opcje;
 int main()
 {
-    char wybory;
-    wybory = getch();
     task* Misja1, Misja2;
     bohater* goblin, rycerz;
     przedmiot* topor, miecz, mlot;
