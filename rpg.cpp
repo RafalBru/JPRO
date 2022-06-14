@@ -321,7 +321,6 @@ void MovingSystem()
 struct MisjeStos
 {
     int nr;
-    MisjeStos* biezaca;
     MisjeStos* nastepna;
 };
 MisjeStos* dodaj(int nr, MisjeStos* koniec)
