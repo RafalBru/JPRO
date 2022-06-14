@@ -325,7 +325,6 @@ void CzyGrac()
 }
 void RefreshMap()
 {
-    system("cls");
     for (int i = 0; i < wiersze; i++)
     {
         for (int j = 0; j < kolumny; j++)
@@ -346,19 +345,65 @@ void MovingSystem()
             switch (mapa[i][j])
             {
             case '@':
-                if (klawisz == 'w' )
+                if (klawisz == 'w')
                 {
-                    int i2 = i - 1;
-                    mapa[i][j] = ' ';
-                    mapa[i2][j] = '@';
-                    system("cls");
-                    RefreshMap();
+                    int i1 = i - 1;
+                    switch (mapa[i1][j])
+                    {
+                    case ' ':
+                        mapa[i][j] = ' ';
+                        mapa[i1][j] = '@';
+                        system("cls");
+                        RefreshMap();
+                        break;
+                    }
+                }
+                if (klawisz == 's')
+                {
+                    int i2 = i + 1;
+                    switch (mapa[i2][j])
+                    {
+                    case ' ':
+                        mapa[i][j] = ' ';
+                        mapa[i2][j] = '@';
+                        system("cls");
+                        RefreshMap();
+                        break;
+                    }
+                }
+                if (klawisz == 'a')
+                {
+                    int j1 = j - 1;
+                    switch (mapa[i][j1])
+                    {
+                    case ' ':
+                        mapa[i][j] = ' ';
+                        j = j - 1;
+                        mapa[i][j1] = '@';
+                        system("cls");
+                        RefreshMap();
+                        break;
+                    }
+                }
+                if (klawisz == 'd')
+                {
+                    int j2 = j + 1;
+                    switch (mapa[i][j2])
+                    {
+                    case ' ':
+                        mapa[i][j] = ' ';
+                        j = j + 1;
+                        mapa[i][j2] = '@';
+                        system("cls");
+                        RefreshMap();
+                        break;
+                    }
                 }
                 break;
             }
         }
     }
-    Sleep(1000);
+    Sleep(100);
 }
  ////////////////////////////////////////////////////////////////  FIFO (dynamiczna struktura danych)
 struct MisjeStos
@@ -425,25 +470,6 @@ void zapis()
 
 }
 /////////////////////////////////////////////////////////////
-void GenerowanieMobow(bohater* Enemy)
-{
-    int przeciwnicy = 40;
-    for (int i = 0; i < wiersze; i++)
-    {
-        for (int j = 0; j < kolumny; j++)
-        { 
-            switch (mapa[i][j])
-            {
-            case ' ':
-                for (int k = 0; k < przeciwnicy; k++)
-                {
-                    mapa[i][j] = Enemy->punkt;
-                }
-                break;
-            }
-        }
-    }
-}
 void walka(bohater* Hero, bohater* Enemy)
 {
     Hero->zdrowie = Hero->zdrowie - Enemy->obrazenia;
