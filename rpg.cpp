@@ -440,6 +440,15 @@ przedmiot* zerowanie(struct przedmiot& topor)
     strcpy_s(topor.opis, " ");
     return &topor;
 }
+void ZwolnijMape()
+{
+    for (int i = 0; i < wiersze; i++)
+    {
+        free(mapa[i]);
+    }
+    free(mapa);
+}
+void (*zwolnicMape)() = &ZwolnijMape;
 void opcje()
 {
     char wybor;
@@ -450,10 +459,12 @@ void opcje()
         zapis();
         break;
     case 'q':
+        (*zwolnicMape)();
+        exit(0);
         break;
-    }    
+    }
 }
-void (*zapisDoPliku)() = &opcje;
+void(*zapisDoPliku)() = &opcje;
 int main()
 {
     task* Misja1, Misja2;
@@ -465,7 +476,7 @@ int main()
     MapGeneration();
     while (1)
     {
-       zapis();
+       (*zapisDoPliku)();
        MovingSystem();
     } 
     
@@ -495,28 +506,3 @@ int main()
     //return 0;
 }
 //ZAL (zrobić zapis do pliku, wskaźnik do funkcji)
-/* 
-15.03.22r.
-przenoszenie do eq
-
-długosc boków: width, height
-kordynaty: x, y
-
-struct przedmiot
-{
-...
-przedmiot* parent = &przedmiot[1][1];
-pos_X = parent->pos_x;
-pos_Y = parent->pos_y;
-}
- (
-*/
-/*for (int i = 0; i < moj_topor.dlugosc; i++)
- {
-     for (int j = 0; j < moj_topor.szerokosc; j++)
-     {
-         obiekt[i][j] = 1;
-     }
- }
- return ;
- */
