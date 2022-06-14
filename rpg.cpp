@@ -437,9 +437,7 @@ MisjeStos* usun(int *nr, MisjeStos* poczatek)
 void zapis()
 {
     FILE* plik = NULL;
-    FILE* plik2 = NULL;
     plik = fopen("zapis.txt", "w");
-    plik2 = fopen("statystyki.txt", "w");
     if (plik == NULL)
     {
         printf("Problem z zapisem mapy");
@@ -451,9 +449,7 @@ void zapis()
             fprintf(plik, "%c", mapa[i][j]);
         }
     }
-    fprintf(plik2, "123456789");
     fclose(plik);
-    fclose(plik2);
     /*
     for (int i = 0; i < wiersze; i++)
     {
@@ -481,6 +477,7 @@ void czyKoniec(bohater* Hero, bohater* Enemy)
     if (Hero->zdrowie <= 0)
     {
         mapa[Hero->pozycjaX][Hero->pozycjaY] = ' ';
+        system("cls");
         printf("Game Over");
     }
     else if (Enemy->zdrowie <= 0)
@@ -545,8 +542,21 @@ przedmiot* zerowanie(struct przedmiot& topor)
     strcpy_s(topor.opis, " ");
     return &topor;
 }
+void opcje()
+{
+    char wybor;
+    wybor = getch();
+    switch (wybor)
+    {
+    case 'p':
+        zapis();
+        break;
+    }
+}
 int main()
 {
+    char wybory;
+    wybory = getch();
     task* Misja1, Misja2;
     bohater* goblin, rycerz;
     przedmiot* topor, miecz, mlot;
@@ -556,7 +566,8 @@ int main()
     MapGeneration();
     while (1)
     {
-        MovingSystem();
+       zapis();
+       MovingSystem();
     } 
     
   /*
