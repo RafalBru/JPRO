@@ -1,2 +1,1 @@
-# JPRO
-My Project
+Projekt JPRO
